@@ -31,6 +31,7 @@ DATABASES = {
 
 
 3. 数据迁移
+
 切到项目根目录下执行
 
 python manage.py makemigrations
@@ -40,9 +41,11 @@ python manage.py migrate
 这样我在项目代码里面创建的表就会更新到你本地的数据库里面
 
 4. 启动项目
+
 python manage.py runserver 9999
 
 5. 其他
+
 启动过程中可能需要安装一些python的三方库类，按照报错提示安装就行了，前后端代码全部都是OK的，前提是你环境都OK的情况下
 
 
