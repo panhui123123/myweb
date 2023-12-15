@@ -3,6 +3,8 @@ import json
 from aip import AipNlp
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
+from django.contrib.auth import authenticate, login, logout
+import random
 from app01.models import *
 
 
@@ -87,5 +89,65 @@ def text_check(request):
             'data': {'before_text': before_text, 'after_text': after_text, 'check_list': check_list},
             'msg': '成功'}
     return JsonResponse(data)
+
+
+def lottery(request):
+    if request.method != 'GET':
+        return JsonResponse({'result': 1, 'msg': 'the method you request is not correct'})
+    num = int(request.GET.get('num', 0))
+    if not num:
+        return JsonResponse({'result': 1, 'msg': 'get out'})
+    result_list = []
+
+    for i in range(num):
+        front_list = []
+        behind_list = []
+        for front_count in range(5):
+            front = random.randint(1, 35)
+            while front in front_list:
+                front = random.randint(1, 35)
+            front_list.append(front)
+
+        for behind_count in range(2):
+            behind = random.randint(1, 12)
+            while behind in behind_list:
+                behind = random.randint(1, 12)
+            behind_list.append(behind)
+        front_list.sort()
+        behind_list.sort()
+        result_list.append({'front_list': front_list, 'behind_list': behind_list})
+
+    return JsonResponse({'result': 0, 'msg': '成功', 'data': result_list})
+
+
+def signin(request):
+    if request.method != 'POST':
+        return JsonResponse({'result': 1, 'msg': 'the method you request is not correct'})
+    request_params = json.loads(request.body)
+    username = request_params['username']
+    password = request_params['password']
+
+    user = authenticate(username=username, password=password)
+
+    if user:
+        if user.is_active:
+            if user.is_superuser:
+                login(request, user)
+                request.session['usertype'] = 'mgr'
+                return JsonResponse({'result': 0, 'msg': '登录成功'})
+            else:
+                return JsonResponse({'result': 1, 'msg': '请使用管理员账户登录'})
+        else:
+            return JsonResponse({'result': 1, 'msg': '登录失败'})
+    else:
+        return JsonResponse({'result': 1, 'msg': '用户名或者密码错误'})
+
+
+def signout(request):
+    # 使用登出方法
+    if request.method != 'POST':
+        return JsonResponse({'result': 1, 'msg': 'the method you request is not correct'})
+    logout(request)
+    return JsonResponse({'result': 0, 'msg': '登出成功'})
 
 

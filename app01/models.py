@@ -14,6 +14,10 @@ class UserInfo(models.Model):
         return self.name
 
 
+# class Login(models.Model):
+#     username = models.CharField(verbose_name='用户名', max_length=10, null=False, blank=False, required=True)
+#     password = models.CharField(verbose_name='密码', max_length=16, null=False, blank=False, required=True)
+
 
 
 

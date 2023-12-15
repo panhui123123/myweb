@@ -1,12 +1,15 @@
 <template>
   <div id="app">
-    <Sidebar />
+    <nav v-if="$route.name !== 'login'">
+      <Sidebar/>
+    </nav>
     <router-view/>
   </div>
 </template>
 
 <script>
 import Sidebar from './components/Sidebar.vue'
+
 export default {
   components: {
     Sidebar

@@ -26,5 +26,8 @@ urlpatterns = [
     path('user_add/', user_add),
     path('user_edit/', user_edit),
     path('user_delete/', user_delete),
-    path('text_check/', text_check)
+    path('text_check/', text_check),
+    path('lottery/', lottery),
+    path('signin/', signin),
+    path('signout/', signout)
 ]
