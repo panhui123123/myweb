@@ -17,6 +17,8 @@
 
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -30,12 +32,12 @@ export default {
       if (this.username === "" || this.password === "") {
         this.$message.warning("用户名或者密码不能为空")
       } else {
-        this.$http.post('http://127.0.0.1:9999/signin/', {
+        axios.post('http://127.0.0.1:9999/signin/', {
           username: this.username,
           password: this.password
         }, {headers: {'Content-Type': 'application/json'}})
           .then((response) => {
-              var res = JSON.parse(response.bodyText)
+              var res = response.data
               if (res.result === 0) {
                 this.$message.success(res.msg)
                 localStorage.setItem('user', JSON.stringify(res.user))
@@ -43,8 +45,11 @@ export default {
               } else {
                 this.$message.error(res.msg)
               }
-            }
-          )
+            })
+          .catch((error) => {
+          console.error(error);
+          this.$message.error('请求失败，请检查网络连接或服务器状态')
+        })
       }
     }
   }

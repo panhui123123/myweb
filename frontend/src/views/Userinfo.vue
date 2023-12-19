@@ -69,6 +69,7 @@
 
 <script>
 import {MessageBox} from "element-ui";
+import axios from "axios";
 
 export default {
   name: 'home',
@@ -97,7 +98,7 @@ export default {
       if (this.phone === "" || this.name === "") {
         this.$message.warning("name or phone can not be blank")
       } else {
-        this.$http.post('http://127.0.0.1:9999/user_add/',
+        axios.post('http://127.0.0.1:9999/user_add/',
           {
             name: this.name, phone: this.phone
           },
@@ -106,7 +107,7 @@ export default {
           }
         )
           .then((response) => {
-            var res = JSON.parse(response.bodyText)
+            var res = response.data
             if (res.result === 0) {
               this.showUser()
               this.$message.success(res.msg)
@@ -115,13 +116,17 @@ export default {
               console.log(res['msg'])
             }
           })
+          .catch((error) => {
+            console.error(error);
+            this.$message.error('请求失败，请检查网络连接或服务器状态')
+          })
       }
     },
 
     showUser(page = this.currentPage) {
-      this.$http.get('http://127.0.0.1:9999/user_list/?page=' + page + '&pageSize=' + this.pageSize)
+      axios.get('http://127.0.0.1:9999/user_list/?page=' + page + '&pageSize=' + this.pageSize)
         .then((response) => {
-          var res = JSON.parse(response.bodyText)
+          var res = response.data
           console.log(res)
           if (res.result === 0) {
             this.data = res['data']
@@ -131,12 +136,16 @@ export default {
             console.log(res['msg'])
           }
         })
+        .catch((error) => {
+          console.error(error);
+          this.$message.error('请求失败，请检查网络连接或服务器状态')
+        })
     },
 
     searchUser(page = this.currentPage) {
-      this.$http.get('http://127.0.0.1:9999/user_list/?name=' + this.searchName + '&page=' + page + '&pageSize=' + this.pageSize)
+      axios.get('http://127.0.0.1:9999/user_list/?name=' + this.searchName + '&page=' + page + '&pageSize=' + this.pageSize)
         .then((response) => {
-          var res = JSON.parse(response.bodyText)
+          var res = response.data
           console.log(res)
           if (res.result === 0) {
             this.data = res['data']
@@ -147,6 +156,10 @@ export default {
             console.log(res['msg'])
           }
         })
+        .catch((error) => {
+          console.error(error);
+          this.$message.error('请求失败，请检查网络连接或服务器状态')
+        })
     },
 
     deleteUser(user) {
@@ -155,21 +168,23 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http.post('http://127.0.0.1:9999/user_delete/', {id: user.id}, {
+        axios.post('http://127.0.0.1:9999/user_delete/', {id: user.id}, {
           headers: {'Content-Type': 'application/json'}
-        }).then((response) => {
-          if (response.status === 500) {
-            this.$message.error('服务器错误')
-          }
-          var res = JSON.parse(response.bodyText)
-          if (res.result === 0) {
-            this.showUser()
-            this.$message.success(res.msg)
-          } else {
-            this.$message.error(res.msg)
-            console.log(res['msg'])
-          }
         })
+          .then((response) => {
+            var res = response.data
+            if (res.result === 0) {
+              this.showUser()
+              this.$message.success(res.msg)
+            } else {
+              this.$message.error(res.msg)
+              console.log(res['msg'])
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            this.$message.error('请求失败，请检查网络连接或服务器状态')
+          })
       }).catch(() => {
         this.$message.info('已取消删除')
       });
@@ -184,22 +199,27 @@ export default {
     },
 
     submitEdit() {
-      this.$http.post('http://127.0.0.1:9999/user_edit/', this.editForm, {
+      axios.post('http://127.0.0.1:9999/user_edit/', this.editForm, {
         headers: {'Content-Type': 'application/json'}
-      }).then((response) => {
-        if (response.status === 500) {
-          this.$message.error('服务器错误')
-        }
-        var res = JSON.parse(response.bodyText)
-        if (res.result === 0) {
-          this.showUser()
-          this.$message.success(res.msg)
-          this.dialogVisible = false;
-        } else {
-          this.$message.error(res.msg)
-          console.log(res['msg'])
-        }
       })
+        .then((response) => {
+          if (response.status === 500) {
+            this.$message.error('服务器错误')
+          }
+          var res = response.data
+          if (res.result === 0) {
+            this.showUser()
+            this.$message.success(res.msg)
+            this.dialogVisible = false;
+          } else {
+            this.$message.error(res.msg)
+            console.log(res['msg'])
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          this.$message.error('请求失败，请检查网络连接或服务器状态')
+        })
     },
 
     resetForm() {
@@ -210,7 +230,7 @@ export default {
       };
     },
 
-     handleSizeChange(val) {
+    handleSizeChange(val) {
       this.pageSize = val;
       this.showUser();
     },

@@ -33,6 +33,8 @@
 
 <script>
 
+import axios from "axios";
+
 export default {
   name: 'home',
   computed: {
@@ -55,9 +57,9 @@ export default {
       if (this.input_text === '') {
         this.$message.warning("输入不能为空");
       } else {
-        this.$http.get('http://127.0.0.1:9999/text_check/' + '?input_text=' + this.input_text)
+        axios.get('http://127.0.0.1:9999/text_check/?input_text=' + this.input_text)
           .then((response) => {
-            var res = JSON.parse(response.bodyText)
+            var res = response.data
             console.log(res)
             if (res.result === 0) {
               this.data = res['data']
@@ -79,6 +81,10 @@ export default {
               this.$message.error('查询失败')
               console.log(res['msg'])
             }
+          })
+          .catch((error) =>{
+            console.error(error)
+            this.$message.error('请求失败，请检查网络连接或服务器状态')
           })
       }
     }

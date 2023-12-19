@@ -31,7 +31,7 @@
 
 
 <script>
-
+import axios from "axios";
 
 export default {
   name: 'home',
@@ -47,16 +47,19 @@ export default {
 
   methods: {
     generateLottery(num) {
-      this.$http.get('http://127.0.0.1:9999/lottery/?num=' + num)
+      axios.get('http://127.0.0.1:9999/lottery/?num=' + num)
         .then( (response) => {
-            var res = JSON.parse(response.bodyText);
+            var res = response.data
             if (res.result === 1) {
               this.$message.error(res.msg);
             } else {
               this.tableData = res.data;
             }
-          }
-        )
+          })
+        .catch( (error) => {
+          console.error(error)
+          this.$message.error('请求失败，请检查网络连接或服务器状态')
+          })
     }
   }
 }
