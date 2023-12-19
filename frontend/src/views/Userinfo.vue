@@ -1,5 +1,3 @@
-
-
 <template>
 
   <div class="home">
@@ -35,6 +33,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 20, 50]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        style="margin-top: 10px">
+      </el-pagination>
 
 
     </el-row>
@@ -75,7 +83,10 @@ export default {
         id: '',
         name: '',
         phone: ''
-      }
+      },
+      total: 0,
+      pageSize: 10,
+      currentPage: 1,
     }
   },
   mounted: function () {
@@ -87,33 +98,34 @@ export default {
         this.$message.warning("name or phone can not be blank")
       } else {
         this.$http.post('http://127.0.0.1:9999/user_add/',
-        {
-          name: this.name, phone: this.phone
-        },
-        {
-          headers: {'Content-Type': 'application/json'}
-        }
-      )
-        .then((response) => {
-          var res = JSON.parse(response.bodyText)
-          if (res.result === 0) {
-            this.showUser()
-            this.$message.success(res.msg)
-          } else {
-            this.$message.error(res.msg)
-            console.log(res['msg'])
+          {
+            name: this.name, phone: this.phone
+          },
+          {
+            headers: {'Content-Type': 'application/json'}
           }
-        })
+        )
+          .then((response) => {
+            var res = JSON.parse(response.bodyText)
+            if (res.result === 0) {
+              this.showUser()
+              this.$message.success(res.msg)
+            } else {
+              this.$message.error(res.msg)
+              console.log(res['msg'])
+            }
+          })
       }
     },
 
-    showUser() {
-      this.$http.get('http://127.0.0.1:9999/user_list/')
+    showUser(page = this.currentPage) {
+      this.$http.get('http://127.0.0.1:9999/user_list/?page=' + page + '&pageSize=' + this.pageSize)
         .then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
           if (res.result === 0) {
             this.data = res['data']
+            this.total = res['total']
           } else {
             this.$message.error('查询失败')
             console.log(res['msg'])
@@ -121,13 +133,14 @@ export default {
         })
     },
 
-    searchUser() {
-      this.$http.get('http://127.0.0.1:9999/user_list/?name=' + this.searchName)
+    searchUser(page = this.currentPage) {
+      this.$http.get('http://127.0.0.1:9999/user_list/?name=' + this.searchName + '&page=' + page + '&pageSize=' + this.pageSize)
         .then((response) => {
           var res = JSON.parse(response.bodyText)
           console.log(res)
           if (res.result === 0) {
             this.data = res['data']
+            this.total = res['total']
             this.$message.success("查询成功")
           } else {
             this.$message.error('查询失败')
@@ -195,7 +208,17 @@ export default {
         name: '',
         phone: ''
       };
-    }
+    },
+
+     handleSizeChange(val) {
+      this.pageSize = val;
+      this.showUser();
+    },
+
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.showUser();
+    },
 
   }
 }

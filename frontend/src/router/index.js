@@ -50,7 +50,8 @@ let router = new Router({
     {
       path: '/lottery',
       name: 'lottery',
-      component: Lottery
+      component: Lottery,
+      meta: { requiresAuth: true }
     }
   ]
 })

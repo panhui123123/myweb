@@ -4,6 +4,7 @@ from aip import AipNlp
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 import random
 from app01.models import *
 
@@ -19,13 +20,16 @@ def user_list(request):
     if request.method != 'GET':
         return JsonResponse({'result': 1, 'msg': 'the method you request is not correct'})
     name = request.GET.get('name', '')
+    page = request.GET.get('page', 1)
+    pageSize = request.GET.get('pageSize', 10)
     if name:
-        QuerySet = UserInfo.objects.filter(name__contains=name).values()
-        res = list(QuerySet)
-        return JsonResponse({'result': 0, 'msg': 'success', 'data': res})
-    QuerySet = UserInfo.objects.values()
-    res = list(QuerySet)
-    return JsonResponse({'result': 0, 'msg': 'success', 'data': res})
+        queryset = UserInfo.objects.filter(name__contains=name)
+    else:
+        queryset = UserInfo.objects.all()
+    paginator = Paginator(queryset.values(), pageSize)
+    users = paginator.get_page(page)
+    res = list(users)
+    return JsonResponse({'result': 0, 'msg': 'success', 'data': res, 'total': paginator.count})
 
 
 def user_add(request):
