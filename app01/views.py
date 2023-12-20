@@ -1,5 +1,4 @@
 import json
-
 from aip import AipNlp
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
@@ -153,5 +152,4 @@ def signout(request):
         return JsonResponse({'result': 1, 'msg': 'the method you request is not correct'})
     logout(request)
     return JsonResponse({'result': 0, 'msg': '登出成功'})
-
 
