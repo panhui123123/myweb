@@ -16,31 +16,31 @@ let router = new Router({
       path: '/',
       name: 'home',
       component: Home,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, breadcrumb: '首页'}
     },
     {
       path: '/about',
       name: 'about',
       component: About,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, breadcrumb: '关于'}
     },
     {
       path: '/userinfo',
       name: 'userinfo',
       component: Userinfo,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, breadcrumb: '用户管理'}
     },
     {
       path: '/textcheck',
       name: 'textcheck',
       component: Textcheck,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, breadcrumb: '错别字检查'}
     },
     {
       path: '/apitest',
       name: 'apitest',
       component: Apitest,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, breadcrumb: '接口测试'}
     },
     {
       path: '/login',
@@ -51,7 +51,9 @@ let router = new Router({
       path: '/lottery',
       name: 'lottery',
       component: Lottery,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, breadcrumb: '转盘' +
+          '' +
+          ''}
     }
   ]
 })
