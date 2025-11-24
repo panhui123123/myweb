@@ -7,6 +7,8 @@ import Textcheck from "../views/Textcheck.vue";
 import Apitest from "../views/Apitest.vue";
 import Login from "../views/login.vue";
 import Lottery from "../views/Lottery.vue";
+import Ball from "../views/Ball.vue";
+import Star from "../views/Star.vue";
 
 Vue.use(Router)
 
@@ -52,6 +54,22 @@ let router = new Router({
       name: 'lottery',
       component: Lottery,
       meta: { requiresAuth: true, breadcrumb: '转盘' +
+          '' +
+          ''}
+    },
+    {
+      path: '/ball',
+      name: 'ball',
+      component: Ball,
+      meta: { requiresAuth: true, breadcrumb: '双色球' +
+          '' +
+          ''}
+    },
+    {
+      path: '/star',
+      name: 'star',
+      component: Star,
+      meta: { requiresAuth: true, breadcrumb: '双色球' +
           '' +
           ''}
     }

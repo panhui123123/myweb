@@ -19,6 +19,12 @@
         <router-link active-class="active" to="/lottery">大乐透选号</router-link>
       </li>
       <li>
+        <router-link active-class="active" to="/ball">双色球选号</router-link>
+      </li>
+      <li>
+        <router-link active-class="active" to="/star">七星彩选号</router-link>
+      </li>
+      <li>
         <router-link active-class="active" to="/about">关于</router-link>
       </li>
       <li>

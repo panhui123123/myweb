@@ -29,5 +29,7 @@ urlpatterns = [
     path('text_check/', text_check),
     path('lottery/', lottery),
     path('signin/', signin),
-    path('signout/', signout)
+    path('signout/', signout),
+    path('ball/', ball),
+    path('star/', star)
 ]

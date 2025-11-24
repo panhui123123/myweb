@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 class="title">欢迎来到我的个人主页, 我将用最真诚的服务, 来给用户带来最极致的体验</h1>
+    <h1 class="title">欢迎来到我的个人主页,我将用最真诚的服务, 来给用户带来最极致的体验</h1>
     <p class="description">在这里，您可以找到我们产品的最新消息、更新和功能。我们致力于为用户提供最好的服务和体验。</p>
     <div class="features">
       <h2 class="subtitle">Features</h2>

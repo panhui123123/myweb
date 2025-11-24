@@ -199,7 +199,10 @@ export default {
     },
 
     submitEdit() {
-      axios.post('http://127.0.0.1:9999/user_edit/', this.editForm, {
+      if (this.editForm.name === "" || this.editForm.phone === "" ) {
+        this.$message.warning("name or phone can not be blank")
+      } else {
+        axios.post('http://127.0.0.1:9999/user_edit/', this.editForm, {
         headers: {'Content-Type': 'application/json'}
       })
         .then((response) => {
@@ -220,6 +223,7 @@ export default {
           console.error(error);
           this.$message.error('请求失败，请检查网络连接或服务器状态')
         })
+      }
     },
 
     resetForm() {

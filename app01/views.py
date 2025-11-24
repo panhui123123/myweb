@@ -98,6 +98,15 @@ def lottery(request):
     if request.method != 'GET':
         return JsonResponse({'result': 1, 'msg': 'the method you request is not correct'})
     num = int(request.GET.get('num', 0))
+    front_kill = request.GET.get('front_kill', [])
+    front_kill_list = []
+    behind_kill = request.GET.get('behind_kill', [])
+    behind_kill_list = []
+
+    if front_kill:
+        front_kill_list = [int(i) for i in front_kill.split(".")]
+    if behind_kill:
+        behind_kill_list = [int(i) for i in behind_kill.split(".")]
     if not num:
         return JsonResponse({'result': 1, 'msg': 'get out'})
     result_list = []
@@ -107,19 +116,74 @@ def lottery(request):
         behind_list = []
         for front_count in range(5):
             front = random.randint(1, 35)
-            while front in front_list:
+            while front in front_list or front in front_kill_list:
                 front = random.randint(1, 35)
             front_list.append(front)
 
         for behind_count in range(2):
             behind = random.randint(1, 12)
-            while behind in behind_list:
+            while behind in behind_list or behind in behind_kill_list:
                 behind = random.randint(1, 12)
             behind_list.append(behind)
         front_list.sort()
         behind_list.sort()
         result_list.append({'front_list': front_list, 'behind_list': behind_list})
 
+    return JsonResponse({'result': 0, 'msg': '成功', 'data': result_list})
+
+
+def ball(request):
+    if request.method != 'GET':
+        JsonResponse({'result': 1, 'msg': 'the method you request is not correct'})
+    num = int(request.GET.get('num', 0))
+
+    front_kill = request.GET.get('front_kill', [])
+    front_kill_list = []
+    behind_kill = request.GET.get('behind_kill', [])
+    behind_kill_list = []
+
+    if front_kill:
+        front_kill_list = [int(i) for i in front_kill.split(".")]
+    if behind_kill:
+        behind_kill_list = [int(i) for i in behind_kill.split(".")]
+    if not num:
+        return JsonResponse({'result': 1, 'msg': 'get out'})
+    result_list = []
+
+    for i in range(num):
+        front_list = []
+        behind_list = []
+        for front_count in range(6):
+            front = random.randint(1, 33)
+            while front in front_list or front in front_kill_list:
+                front = random.randint(1, 33)
+            front_list.append(front)
+        behind = random.randint(1, 16)
+        while behind in behind_list or behind in behind_kill_list:
+            behind = random.randint(1, 16)
+        behind_list.append(behind)
+        front_list.sort()
+        behind_list.sort()
+        result_list.append({'front_list': front_list, 'behind_list': behind_list})
+    return JsonResponse({'result': 0, 'msg': '成功', 'data': result_list})
+
+
+def star(request):
+    if request.method != 'GET':
+        JsonResponse({'result': 1, 'msg': 'the method you request is not correct'})
+    num = int(request.GET.get('num', 0))
+    if not num:
+        return JsonResponse({'result': 1, 'msg': 'get out'})
+    result_list = []
+    for i in range(num):
+        front_list = []
+        behind_list = []
+        for front_count in range(6):
+            front = random.randint(0, 9)
+            front_list.append(front)
+        behind = random.randint(0, 14)
+        behind_list.append(behind)
+        result_list.append({'front_list': front_list, 'behind_list': behind_list})
     return JsonResponse({'result': 0, 'msg': '成功', 'data': result_list})
 
 

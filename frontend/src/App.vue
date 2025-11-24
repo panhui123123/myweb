@@ -3,7 +3,7 @@
     <nav v-if="$route.name !== 'login'">
       <Sidebar/>
     </nav>
-    <div id="navbar">
+    <div id="navbar" v-if="$route.name !== 'login'">
       <div id="breadcrumbs">
         <span v-for="(route, index) in $route.matched" :key="index">
           <router-link :to="route.path">{{ route.meta.breadcrumb }}</router-link>
