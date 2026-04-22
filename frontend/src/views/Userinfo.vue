@@ -95,8 +95,11 @@ export default {
   },
   methods: {
     addUser() {
+      const phoneRegex = /^1[3-9]\d{9}$/;
       if (this.phone === "" || this.name === "") {
         this.$message.warning("name or phone can not be blank")
+      } else if (!phoneRegex.test(this.phone)){
+        this.$message.warning("手机号不行")
       } else {
         axios.post('http://127.0.0.1:9999/user_add/',
           {
